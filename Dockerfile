@@ -14,8 +14,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY poetry.lock pyproject.toml alembic.ini prestart.sh main.py ./
-COPY ./migrations
+COPY poetry.lock pyproject.toml alembic.ini ./
+ADD migrations ./migrations
+ADD app ./app
 
 RUN poetry install --no-root
 
@@ -24,8 +25,8 @@ RUN poetry install --no-root
 EXPOSE 8000
 
 
-RUN chmod +x prestart.sh
+RUN chmod +x app/prestart.sh
 
-ENTRYPOINT ["./prestart.sh"]
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["./app/prestart.sh"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 

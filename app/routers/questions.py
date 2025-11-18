@@ -1,4 +1,4 @@
-from typing import List
+from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -13,8 +13,8 @@ from app.routers.dependencies import get_question_by_id
 router = APIRouter(prefix="/questions", tags=["questions"])
 
 
-@router.get("/", response_model=List[QuestionResponse])
-async def get_questions(database: AsyncSession = Depends(get_database)):
+@router.get("/", response_model=list[QuestionResponse])
+async def get_questions(database: Annotated[AsyncSession, Depends(get_database)]):
     """Get a list of all questions."""
 
     result = (await database.scalars(select(Question))).all()
@@ -23,7 +23,8 @@ async def get_questions(database: AsyncSession = Depends(get_database)):
 
 @router.post("/", response_model=QuestionResponse, status_code=status.HTTP_201_CREATED)
 async def create_question(
-    question_data: QuestionCreate, database: AsyncSession = Depends(get_database)
+    question_data: QuestionCreate,
+    database: Annotated[AsyncSession, Depends(get_database)],
 ):
     """Create a new question."""
 
@@ -51,7 +52,7 @@ async def create_question(
 
 @router.get("/{question_id}", response_model=QuestionWithAnswers)
 async def get_question(
-    question_id: int, database: AsyncSession = Depends(get_database)
+    question_id: int, database: Annotated[AsyncSession, Depends(get_database)]
 ):
     """Get a question by ID with all its answers."""
 
@@ -62,7 +63,7 @@ async def get_question(
 
 @router.delete("/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_question(
-    question_id: int, database: AsyncSession = Depends(get_database)
+    question_id: int, database: Annotated[AsyncSession, Depends(get_database)]
 ):
     """Delete a question by ID."""
 
@@ -80,7 +81,7 @@ async def delete_question(
 async def create_answer(
     question_id: int,
     answer_data: AnswerCreate,
-    database: AsyncSession = Depends(get_database),
+    database: Annotated[AsyncSession, Depends(get_database)],
 ):
     """Add an answer to a question."""
     if not answer_data.text:

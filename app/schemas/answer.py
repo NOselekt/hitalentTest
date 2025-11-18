@@ -23,7 +23,7 @@ class AnswerUpdate(BaseModel):
     """Schema for updating an Answer."""
 
     text: Optional[str]
-    id: Optional[UUID] 
+    id: Optional[UUID]
 
 
 class AnswerResponse(AnswerBase):
@@ -32,4 +32,4 @@ class AnswerResponse(AnswerBase):
     id: int
     user_id: UUID
     created_at: datetime
-
+    question_id: int

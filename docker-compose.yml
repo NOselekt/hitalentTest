@@ -3,8 +3,6 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./
-    environment:
-      APP_CONFIG_DB_URL: postgresql+asyncpg://postgres:postgres@pg:5432/hitalentTest
     depends_on:
       pg:
        condition: service_healthy
