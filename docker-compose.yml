@@ -1,0 +1,72 @@
+# services:
+#   api:
+#     build: .
+#     ports:
+#       - "8000:8000"
+#     environment:
+#       DB_USER: ${DB_USER:-postgres}
+#       DB_PASS: ${DB_PASS:-uriel999}
+#       DB_NAME: ${DB_NAME:-hitalentTest}
+#       DB_HOST: ${DB_HOST:-db}
+#       DB_PORT: ${DB_PORT:-5432}
+#     depends_on:
+#       db:
+#         condition: service_healthy
+
+#   db:
+#     image: postgres:16
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_USER: ${DB_USER:-postgres}
+#       POSTGRES_PASSWORD: ${DB_PASS:-uriel999}
+#       POSTGRES_DB: ${DB_NAME:-hitalentTest}
+#     ports:
+#       - "5432:5432"
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    environment:
+      APP_CONFIG_DB_URL: postgresql+asyncpg://postgres:postgres@pg:5432/hitalentTest
+    depends_on:
+      pg:
+       condition: service_healthy
+    ports:
+      - "8000:8000"
+  pg:
+    image: postgres
+    user: postgres
+    environment:
+      POSTGRES_DB: hitalentTest
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    depends_on:
+      pg:
+        condition: service_healthy
+    ports:
+      - "5050:80"
+volumes:
+  pgdata:
