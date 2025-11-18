@@ -70,13 +70,13 @@ Docker
    `poetry install`
 ### Запуск
 Сервис доступен на localhost:8000 (http://127.0.0.1:8000). При переходе на главную страницу вас автоматически перенаправит в документацию (http://127.0.0.1:8000/docs), где можно изучить проект и использовать методы.
-![Скриншот 1](docs/images/1.png)
+![Скриншот 1](docs/images/2.png)
 На localhost:5050 (http://127.0.0.1:5050/browser/) доступен pgAdmin, через который можно управлять БД.
-![Скриншот 2](docs/images/2.png)
+![Скриншот 2](docs/images/1.png)
 Для остановки проекта из Docker
 `docker compose down`
 
-#ENGLISH
+# ENGLISH
 ## API Service for Questions and Answers
 A solution for a test assignment for the company Hightalent.  
 A REST API service for working with questions and answers, built using FastAPI.
