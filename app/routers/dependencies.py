@@ -1,7 +1,7 @@
-from fastapi import Depends, HTTPException, status
-from sqlalchemy import select
+from fastapi import Depends, HTTPException
+from select import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
+from starlette import status
 
 from app.backend.async_database import get_database
 from app.models.Answer import Answer
@@ -13,12 +13,7 @@ async def get_question_by_id(
 ) -> Question:
     """Get a question by ID."""
 
-    query = (
-        select(Question)
-        .options(selectinload(Question.answers))
-        .where(Question.id == question_id)
-    )
-    question = await database.scalar(query)
+    question = await database.scalar(select(Question).where(Question.id == question_id))
 
     if not question:
         raise HTTPException(
@@ -31,7 +26,7 @@ async def get_question_by_id(
 
 async def get_answer_by_id(
     answer_id: int, database: AsyncSession = Depends(get_database)
-) -> Answer:
+) -> Question:
     """Get an answer by ID."""
 
     answer = await database.scalar(select(Answer).where(Answer.id == answer_id))
@@ -39,7 +34,7 @@ async def get_answer_by_id(
     if not answer:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Answer with id {answer_id} not found",
+            detail=f"Question with id {answer_id} not found",
         )
 
     return answer

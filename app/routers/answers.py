@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,7 +11,9 @@ router = APIRouter(prefix="/answers", tags=["answers"])
 
 
 @router.get("/{answer_id}", response_model=AnswerResponse)
-async def get_answer(answer_id: int, database: AsyncSession = Depends(get_database)):
+async def get_answer(
+    answer_id: int, database: Annotated[AsyncSession, Depends(get_database)]
+):
     """Get an answer by ID."""
     answer = await get_answer_by_id(database=database, answer_id=answer_id)
 
@@ -17,7 +21,9 @@ async def get_answer(answer_id: int, database: AsyncSession = Depends(get_databa
 
 
 @router.delete("/{answer_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_answer(answer_id: int, database: AsyncSession = Depends(get_database)):
+async def delete_answer(
+    answer_id: int, database: Annotated[AsyncSession, Depends(get_database)]
+):
     """Delete an answer by ID."""
     answer = await get_answer_by_id(database=database, answer_id=answer_id)
 

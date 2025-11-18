@@ -17,5 +17,5 @@ class Question(Base):
     text: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
 
     answers: Mapped[list["Answer"]] = relationship(
-        backref="questions", cascade="all, delete-orphan"
+        backref="questions", cascade="all, delete-orphan", lazy="selectin"
     )
