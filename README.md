@@ -178,12 +178,12 @@ The service is available at:
 Opening the root page will automatically redirect you to the documentation:  
 **http://127.0.0.1:8000/docs**
 
-![Screenshot 1](docs/images/1.png)
+![Screenshot 1](docs/images/2.png)
 
 pgAdmin is available at:  
 **http://127.0.0.1:5050/browser/**
 
-![Screenshot 2](docs/images/2.png)
+![Screenshot 2](docs/images/1.png)
 
 To stop the Docker services:
 `docker compose down`
