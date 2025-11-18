@@ -35,7 +35,7 @@ async def get_answer_by_id(
     if not answer:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Question with id {answer_id} not found",
+            detail=f"Answer with id {answer_id} not found",
         )
 
     return answer
